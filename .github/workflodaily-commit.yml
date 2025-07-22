@@ -1,0 +1,32 @@
+name: Daily GitHub Streak
+
+on:
+  schedule:
+    # Runs every day at 00:00 UTC (midnight UTC)
+    # You can adjust this cron schedule as needed.
+    # For example, '*/5 * * * *' would run every 5 minutes (for testing).
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Allows manual trigger of the workflow
+
+jobs:
+  commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure Git
+        run: |
+          git config user.name "chaitanyamanyamgithub" 
+          git config user.email "rm3893@srmist.edu.in" 
+
+      - name: Create or update a file
+        run: |
+          FILE_NAME="streak-log.md" # You can choose any file name
+          echo "Last updated: $(date)" > "$FILE_NAME"
+
+      - name: Commit and push changes
+        run: |
+          git add .
+          git commit -m "Automated commit to keep the streak alive: $(date)" || echo "No changes to commit, skipping."
+          git push
